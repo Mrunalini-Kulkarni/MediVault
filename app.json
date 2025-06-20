@@ -1,4 +1,13 @@
 {
-  "name": "patient-dapp",
-  "slug": "patient-dapp"
+  "expo": {
+    "name": "patient-dapp",
+    "slug": "patient-dapp",
+    "scheme": "patientdapp",
+    "plugins": [
+      "expo-router"
+    ],
+    "android": {
+      "package": "com.anonymous.patientdapp"
+    }
+  }
 }
