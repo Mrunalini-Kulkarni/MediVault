@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
 import { accessRequests } from '../../constants/mockAccessRequests';
-import Header from '../../components/Header';
+import Header from './Header';
 import { colors } from '../../constants/colors';
 
 export default function AccessRequestsScreen() {

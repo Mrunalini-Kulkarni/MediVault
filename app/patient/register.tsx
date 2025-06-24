@@ -7,6 +7,7 @@ import { PatientData, mockPatients } from "../../data/mockData";
 
 export default function Register() {
   const router = useRouter();
+
   const [form, setForm] = useState({
     Name: "",
     age: "",
@@ -24,17 +25,14 @@ export default function Register() {
   };
 
   const handleRegister = async () => {
-    // Validate
     if (!form.Name || !form.email || !form.password) {
       Alert.alert("Error", "Please fill all required fields (Name, Email, Password).");
       return;
     }
 
-    // Get existing patients from AsyncStorage
     const jsonPatients = await AsyncStorage.getItem("patients");
     let patients: PatientData[] = jsonPatients ? JSON.parse(jsonPatients) : [...mockPatients];
 
-    // Check duplicate email or contact
     const exists = patients.find(
       (p) => p.email === form.email || p.contact === form.contact
     );
@@ -43,15 +41,11 @@ export default function Register() {
       return;
     }
 
-    // Add new patient and save
     patients.push(form as PatientData);
     await AsyncStorage.setItem("patients", JSON.stringify(patients));
 
     Alert.alert("Success", "Registration Successful!");
-    router.push({
-      pathname: "/patient",
-      params: { Name: form.Name },
-    });
+    router.replace("/patient/login");
   };
 
   return (
@@ -77,9 +71,17 @@ export default function Register() {
       <Button
         onPress={() => router.push("/patient/login")}
         mode="text"
-        style={styles.loginLink}
+        style={styles.link}
       >
         Already have an account? Login
+      </Button>
+
+      <Button
+        onPress={() => router.replace("/roleSelect")}
+        mode="text"
+        style={styles.link}
+      >
+        ← Back to Role Selection
       </Button>
     </ScrollView>
   );
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#008080",
     fontWeight: "bold",
+    textAlign: "center",
   },
   input: {
     marginBottom: 12,
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: "#008080",
   },
-  loginLink: {
+  link: {
     marginTop: 10,
     alignSelf: "center",
   },

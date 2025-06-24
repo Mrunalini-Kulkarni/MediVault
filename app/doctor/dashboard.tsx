@@ -1,49 +1,60 @@
-// app/patient/index.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { MaterialIcons, FontAwesome5, Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import Header from "./Header";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const cards = [
   {
     id: "1",
-    title: "Medical Records",
-    icon: <MaterialIcons name="folder-special" size={40} color="#008080" />,
-    route: "records",
+    title: "View Patients",
+    icon: <FontAwesome5 name="users" size={40} color="#008080" />,
+    route: "viewPatients",
   },
   {
     id: "2",
-    title: "Doctors",
-    icon: <FontAwesome5 name="user-md" size={40} color="#008080" />,
-    route: "doctors",
+    title: "Add Patient",
+    icon: <MaterialIcons name="person-add" size={40} color="#008080" />,
+    route: "addPatient",
   },
   {
     id: "3",
-    title: "Access Requests",
-    icon: <MaterialIcons name="request-page" size={40} color="#008080" />,
-    route: "access",
+    title: "Add Medical Record",
+    icon: <MaterialIcons name="post-add" size={40} color="#008080" />,
+    route: "addRecord",
   },
   {
     id: "4",
-    title: "Emergency Access",
-    icon: <Ionicons name="medkit-outline" size={40} color="#008080" />,
-    route: "emergency",
+    title: "View Records",
+    icon: <Ionicons name="document-text-outline" size={40} color="#008080" />,
+    route: "viewRecords",
   },
 ];
 
-export default function PatientHomeScreen() {
-  const params = useLocalSearchParams();
-  const name = (params.name as string) || "Jane Doe";
+export default function DoctorDashboard() {
+  const [doctorName, setDoctorName] = useState<string>("Doctor");
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchDoctorData = async () => {
+      const jsonDoctor = await AsyncStorage.getItem("doctorData");
+      if (jsonDoctor) {
+        const doctor = JSON.parse(jsonDoctor);
+        setDoctorName(doctor.name);
+      }
+    };
+
+    fetchDoctorData();
+  }, []);
+
   const handleCardPress = (route: string) => {
-    router.push(`/patient/${route}`);
+    router.push(`/doctor/${route}`);
   };
 
   return (
     <View style={styles.container}>
-      <Header Name={name} />
+      <Header Name={`Dr. ${doctorName}`} />
 
       <FlatList
         data={cards}
@@ -66,11 +77,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: 30,
-    paddingHorizontal: 14,
+    paddingTop: 50,
+    paddingHorizontal: 12,
   },
   grid: {
-    paddingTop : 40,
+    paddingTop: 40,
     paddingBottom: 20,
   },
   card: {

@@ -3,9 +3,9 @@ import { View, StyleSheet, Alert } from "react-native";
 import { TextInput, Button, Text } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { mockPatients, PatientData } from "../../data/mockData";
+import { validateDoctorLogin, DoctorData } from "../../data/doctorData";
 
-export default function Login() {
+export default function DoctorLogin() {
   const router = useRouter();
 
   const [username, setUsername] = useState(""); // email or contact
@@ -13,7 +13,7 @@ export default function Login() {
   const [step, setStep] = useState<1 | 2>(1);
   const [inputOtp, setInputOtp] = useState("");
   const [generatedOtp, setGeneratedOtp] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState<PatientData | null>(null);
+  const [loggedInDoctor, setLoggedInDoctor] = useState<DoctorData | null>(null);
 
   const handleLoginStep1 = async () => {
     if (!username || !password) {
@@ -21,20 +21,16 @@ export default function Login() {
       return;
     }
 
-    const jsonPatients = await AsyncStorage.getItem("patients");
-    const patients: PatientData[] = jsonPatients ? JSON.parse(jsonPatients) : mockPatients;
+    const doctor = await validateDoctorLogin(username, password);
 
-    const user = patients.find(
-      (p) => (p.email === username || p.contact === username) && p.password === password
-    );
-
-    if (!user) {
+    if (!doctor) {
       Alert.alert("Error", "Invalid username or password.");
       return;
     }
 
-    setLoggedInUser(user);
+    setLoggedInDoctor(doctor);
 
+    // Generate OTP
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     setGeneratedOtp(otp);
     Alert.alert("OTP Verification", `Your OTP is: ${otp}`);
@@ -43,12 +39,9 @@ export default function Login() {
 
   const handleLoginStep2 = async () => {
     if (inputOtp === generatedOtp) {
-      if (loggedInUser) {
-        await AsyncStorage.setItem("patientData", JSON.stringify(loggedInUser));
-        router.push({
-          pathname: "/patient",
-          params: { name: loggedInUser.Name },
-        });
+      if (loggedInDoctor) {
+        await AsyncStorage.setItem("doctorData", JSON.stringify(loggedInDoctor));
+        router.replace("/doctor/dashboard");
       }
     } else {
       Alert.alert("Error", "Incorrect OTP. Please try again.");
@@ -58,7 +51,7 @@ export default function Login() {
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>
-        Patient Login
+        Doctor Login
       </Text>
 
       {step === 1 ? (
@@ -82,7 +75,7 @@ export default function Login() {
             Login
           </Button>
           <Button
-            onPress={() => router.push("/patient/register")}
+            onPress={() => router.push("/doctor/register")}
             mode="text"
             style={styles.registerLink}
           >
@@ -104,6 +97,7 @@ export default function Login() {
         </>
       )}
 
+      {/* 👇 New "Back to Role Selection" Button */}
       <Button
         onPress={() => router.replace("/roleSelect")}
         mode="text"
@@ -116,31 +110,16 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#fff",
-  },
-  title: {
-    marginBottom: 20,
-    color: "#008080",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  input: {
-    marginBottom: 15,
-    backgroundColor: "white",
-  },
-  button: {
-    backgroundColor: "#008080",
-  },
+  container: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#fff" },
+  title: { marginBottom: 20, color: "#008080", fontWeight: "bold" },
+  input: { marginBottom: 15, backgroundColor: "white" },
+  button: { backgroundColor: "#008080" },
   registerLink: {
     marginTop: 10,
     alignSelf: "center",
   },
   backLink: {
-    marginTop: 15,
+    marginTop: 20,
     alignSelf: "center",
   },
 });
