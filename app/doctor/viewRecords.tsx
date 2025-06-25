@@ -18,7 +18,7 @@ export default function ViewRecords() {
   }, []);
 
   const renderRecord = ({ item }: { item: MedicalRecord }) => (
-    <Card style={styles.card} mode="outlined">
+    <Card style={styles.card} >
       <Card.Title
         title={item.patientName}
         subtitle={`${item.type} | ${item.date}`}

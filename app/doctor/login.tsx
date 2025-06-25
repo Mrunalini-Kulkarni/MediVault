@@ -63,6 +63,7 @@ export default function DoctorLogin() {
             style={styles.input}
             autoCapitalize="none"
             keyboardType="email-address"
+            theme={{colors:{text:"black"}}}
           />
           <TextInput
             label="Password"
@@ -71,7 +72,7 @@ export default function DoctorLogin() {
             secureTextEntry
             style={styles.input}
           />
-          <Button mode="contained" onPress={handleLoginStep1} style={styles.button}>
+          <Button mode="contained" onPress={handleLoginStep1} style={styles.button} textColor="white">
             Login
           </Button>
           <Button
@@ -90,8 +91,9 @@ export default function DoctorLogin() {
             onChangeText={setInputOtp}
             keyboardType="numeric"
             style={styles.input}
+            theme={{ colors:{text:"black"}}}
           />
-          <Button mode="contained" onPress={handleLoginStep2} style={styles.button}>
+          <Button mode="contained" onPress={handleLoginStep2} style={styles.button} textColor="white">
             Verify OTP
           </Button>
         </>

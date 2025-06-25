@@ -53,7 +53,7 @@ export default function RoleSelect() {
             style={styles.touchable}
             onPress={() => router.push("/patient/login")}
           >
-            <MaterialIcons name="person" size={40} color="#008080" />
+            <MaterialIcons name="person" size={55} color="#008080" />
             <Text style={styles.cardTitle}>Patient</Text>
           </TouchableOpacity>
         </Animated.View>
