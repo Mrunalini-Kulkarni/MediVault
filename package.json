@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "author": "Charles Stover <with-router@charlesstover.com>",
   "bugs": {
-    "email": "with-router@charlesstover.com",
-    "url": "https://github.com/CharlesStover/with-router/issues"
+    "url": "https://github.com/CharlesStover/with-router/issues",
+    "email": "with-router@charlesstover.com"
   },
   "directories": {
-    "lib": "src"
+    "lib": "lib"
   },
   "files": [
     "index.js",
@@ -70,5 +70,12 @@
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
   },
-  "private": true
+  "private": true,
+  "description": "A pub-sub alternative HOC to `react-router`'s `withRouter` HOC. It functions exactly the same way, except the wrapped component will re-render when the route changes. This is beneficial if your view changes depending on the current path.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mrunalini-Kulkarni/MediVault.git"
+  },
+  "keywords": [],
+  "type": "commonjs"
 }

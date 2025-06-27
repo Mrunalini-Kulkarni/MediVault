@@ -15,6 +15,7 @@ export default function RoleSelect() {
   // Shared values for animation
   const doctorScale = useSharedValue(0);
   const patientScale = useSharedValue(0);
+  const hospitalScale = useSharedValue(0);
 
   // Animated styles
   const doctorCardStyle = useAnimatedStyle(() => ({
@@ -27,10 +28,16 @@ export default function RoleSelect() {
     opacity: patientScale.value,
   }));
 
+  const hospitalCardStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: hospitalScale.value }],
+    opacity: hospitalScale.value,
+  }));
+
   // Trigger animation on mount
   useEffect(() => {
     doctorScale.value = withDelay(100, withTiming(1, { duration: 400 }));
     patientScale.value = withDelay(300, withTiming(1, { duration: 400 }));
+    hospitalScale.value = withDelay(500, withTiming(1, { duration: 400 }));
   }, []);
 
   return (
@@ -57,6 +64,16 @@ export default function RoleSelect() {
             <Text style={styles.cardTitle}>Patient</Text>
           </TouchableOpacity>
         </Animated.View>
+
+        <Animated.View style={[styles.card, hospitalCardStyle]}>
+          <TouchableOpacity
+            style={styles.touchable}
+            onPress={() => router.push("/hospital/login")}
+          >
+            <FontAwesome5 name="hospital" size={55} color="#008080" />
+            <Text style={styles.cardTitle}>Hospital</Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
     </View>
   );
@@ -79,6 +96,7 @@ const styles = StyleSheet.create({
   },
   grid: {
     flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
     width: "100%",
   },
@@ -90,6 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 3,
+    marginBottom: 20,
   },
   touchable: {
     flex: 1,
